@@ -4,6 +4,7 @@ import { IncomingMessage, Server, ServerResponse } from 'http';
 import bookPrivateRoutes from './books';
 import { UserInstance } from '../types';
 import superAdminPrivateRoutes from './super-admins/super-admins-private-routes';
+import sessionPrivateRoutes from './sessions/session-private.routes';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -19,6 +20,7 @@ function privateRoutes(
   userAuthenticate(fastify);
     fastify.register(bookPrivateRoutes);
     fastify.register(superAdminPrivateRoutes);
+    fastify.register(sessionPrivateRoutes);
     next();
 }
 

@@ -23,7 +23,7 @@ module.exports = {
       },
       encrypted_password: {
         type: Sequelize.STRING,
-        allowNull: false
+        allowNull: true
       },
       access_token: {
         type: Sequelize.STRING,

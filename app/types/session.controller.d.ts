@@ -9,9 +9,12 @@ export interface LoginServiceParams {
 }
 
 export interface JwtTokenUserAttributes {
+  id: number;
   email: string;
 }
 
 export interface JwtResetTokenUserAttributes {
+  id: number;
   email: string;
+  type: string;
 }

@@ -1,19 +1,40 @@
-import { UserCreationAttributes } from '../types';
+import { UserCreationAttributes, UserInstance } from '../types';
 import models from '../models';
 import bcrypt from 'bcrypt';
+import { sendInvitationLink } from './mailer.service';
+import { sign as jwtSignin } from 'jsonwebtoken';
+
+const { UserInstance } = models 
 
 const { User } = models;
 
-async function create(attributes) {
-  const user = await User.findOne({ where: { email: attributes.email } });
+function sendUserInvitation(user: UserInstance) {
+  const { JWT_SECRET_KEY = '' } = process.env;
+  const { id, email } = user;
+  const token = jwtSignin(
+    { id, email, time: new Date() },
+    JWT_SECRET_KEY,
+    {
+      expiresIn:  6000
+    }
+  );
+  sendInvitationLink(user, token);
+}
+
+async function create(attributes) {  
+  const user = await User.findOne({ where: { email: attributes.superAdmin.email } });
   if (user) {
     throw new Error('this user email already exist');
   }
-  const users= await User.create(attributes);
-  await users.update({
-    encrypted_password: bcrypt.hashSync(users.encrypted_password, 10)
-  });
-  return users
+  const users= await User.create(attributes.superAdmin);
+  // await users.update({
+  //   encrypted_password: bcrypt.hashSync(users.encrypted_password, 10)
+  // });
+  
+  return users.then((user)=>{
+    sendUserInvitation(user);
+    return user
+  })
 }
 
 function list() {
@@ -28,16 +49,16 @@ async function getById(id) {
   return user;
 }
 
-async function update(id, params: UserCreationAttributes) {
+async function update(id, params) {
   const user = await User.findOne({ where: { id } });
-  const users = await User.findOne({ where: { email: params.email } });
+  const users = await User.findOne({ where: { email: params.superAdmin.email } });
   if (!user) {
     throw new Error('User not found');
   }
   if (users) {
     throw new Error('this user email already exist');
   }
-  return user.update(params);
+  return user.update(params.superAdmin);
 }
 
 async function destoryById(id) {

@@ -16,7 +16,7 @@ function create(req: FastifyRequest, reply: FastifyReply) {
   const params = body as CreateSuperAdminBody;
   if (policy.canCreate()) {
     superAdminService
-      .create(params.super_admin)
+      .create(params)
       .then((result: UserInstance) => {
         reply.code(200).send(result);
       })
@@ -69,12 +69,12 @@ function view(req: FastifyRequest, reply: FastifyReply) {
 
 function update(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const { body } = req;
-  const policy = new SuperAdminPolicy(req.currentUser);
-  const params = body as UpdateSuperAdminBody;
+  const { currentUser, body } = req;
+  const policy = new SuperAdminPolicy(currentUser);
+  const params = body as CreateSuperAdminBody;  
   if (policy.canUpdate()) {
     superAdminService
-      .update(id, params.super_admin)
+      .update(id, params)
       .then((result: UserInstance) => {
         reply.code(200).send(result);
       })

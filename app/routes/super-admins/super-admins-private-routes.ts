@@ -1,12 +1,11 @@
 import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import * as SuperAdminController from '../../controllers/v1/super-admins-controller';
-import viewBookOpts from '../books/book-view-route-options';
 import destorySuperAdminOpts from './super-admin-destory-route-options';
 import createSuperAdminOpts from './super-admins-create-route-options';
 import listSuperAdminOpts from './super-admins-list-route.options';
 import updateSuperAdminOpts from './super-admins-update-route-options';
-import viewSuperAdminOpts from './super-admins-view-options';
+import viewSuperAdminOpts from './super-admins-view-route-options';
 
 function superAdminPrivateRoutes(
   fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,

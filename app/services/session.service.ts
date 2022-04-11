@@ -1,8 +1,8 @@
 import { UserInstance } from '../models/user';
-import { LoginServiceParams } from '../types/session.controller';
+import { JwtResetTokenUserAttributes, LoginServiceParams } from '../types/session.controller';
 import models from '../models';
 import bcrypt from 'bcrypt';
-import { sign as jwtSignin } from 'jsonwebtoken';
+import { sign as jwtSignin, verify as jwtVerify } from 'jsonwebtoken';
 
 const { User } = models;
 
@@ -54,4 +54,58 @@ async function markSignin(user: UserInstance, attrs: LoginServiceParams) {
   return token;
 }
 
-export default signin;
+function markLogout(user: UserInstance) {
+  console.log('-----------------logout------------', user);
+  return User.update(
+    { access_token: null },
+    {
+      where: {
+        email: user.email
+      }
+    }
+  );
+}
+
+function verifyToken(
+  token: string,
+  secretKey: string
+): Promise<JwtResetTokenUserAttributes> {
+  return new Promise((resolve, reject) =>
+    jwtVerify(
+      token,
+      secretKey,
+      (err: string, decoded: JwtResetTokenUserAttributes) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(decoded);
+        }
+      }
+    )
+  );
+}
+
+async function decryptUserAttrsFromInvitationToken(
+  invitationToken: string,
+  type: string
+) {
+  const token = invitationToken.split(' ')[1];
+  if (!token) {
+    throw new Error('No access token found');
+  }
+  const { JWT_SECRET_KEY = '' } = process.env;
+  try {
+    const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
+    if (!userAttrs || type !== userAttrs.type) {
+      throw new Error('Invalid access token');
+    }
+    return userAttrs;
+  } catch (error: any) {
+    if (error.message === 'jwt expired') {
+      throw new Error('Access token has been expired');
+    }
+    throw new Error('Invalid access token');
+  }
+}
+
+export { signin, markLogout, decryptUserAttrsFromInvitationToken };
