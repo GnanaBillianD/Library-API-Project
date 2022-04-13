@@ -2,9 +2,13 @@ import models from '../models';
 import { UserInstance } from '../types';
 import { sign as jwtSignin } from 'jsonwebtoken';
 import { sendResetPasswordLink } from './mailer.service';
-import { ResetPasswordParams } from '../types/passwords-controller';
-import { decryptUserAttrsFromInvitationToken } from './session.service';
+import {
+  ChangePasswordParams,
+  ResetPasswordParams
+} from '../types/passwords-controller';
+import bcrypt from 'bcrypt';
 import { TOKEN_TYPE } from '../config/constants';
+import { verifyToken } from './session.service';
 
 const { User } = models;
 
@@ -23,10 +27,37 @@ async function sendResetPasswordInstruction(email: string) {
   const user = await getUserByEmail(email);
   const { JWT_SECRET_KEY = '' } = process.env;
   const { id } = user;
-  const token = jwtSignin({ id, email }, JWT_SECRET_KEY, {
-    expiresIn: 6000
-  });
+  const token = jwtSignin(
+    { id, email, type: TOKEN_TYPE.resetPassword },
+    JWT_SECRET_KEY,
+    {
+      expiresIn: 6000
+    }
+  );
   sendResetPasswordLink(user, token);
+}
+
+async function decryptUserAttrsFromInvitationToken(invitationToken, type) {
+  // console.log("invitationToken-------------------->", token)
+  const token = invitationToken
+  console.log("invitation=--=-=-=-=-=-=-=-", invitationToken)
+  if (!token) {
+    throw new Error('No access token found');
+  }
+  const { JWT_SECRET_KEY = '' } = process.env;
+  try {
+    const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
+    console.log("uersAttrs-----",userAttrs.type)
+    if (!userAttrs || type !== userAttrs.type) {
+      throw new Error('Invalid access token');
+    }
+    return userAttrs;
+  } catch (error: any) {
+    if (error.message === 'jwt expired') {
+      throw new Error('Access token has been expired');
+    }
+    throw new Error('Invalid access token');
+  }
 }
 
 async function verifyAndResetPassword(
@@ -47,4 +78,22 @@ async function verifyAndResetPassword(
   return await user.update(updateAttrs);
 }
 
-export { sendResetPasswordInstruction, verifyAndResetPassword };
+async function verifyAndChangePassword(
+  passwordParams: ChangePasswordParams,
+  currentUser: UserInstance
+) {
+  const isPasswordMatched = bcrypt.compareSync(
+    passwordParams.current_password,
+    currentUser.encrypted_password
+  );
+  if (!isPasswordMatched) {
+    throw new Error('Invalid current_password');
+  }
+  return currentUser.update({ ...passwordParams });
+}
+
+export {
+  sendResetPasswordInstruction,
+  verifyAndResetPassword,
+  verifyAndChangePassword
+};

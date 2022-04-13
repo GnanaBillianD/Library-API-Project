@@ -10,7 +10,7 @@ function login(req: FastifyRequest, reply: FastifyReply) {
       reply.code(200).send({ message: 'Login successfully' });
     })
     .catch((error) => {
-      reply.send({ errors: [error.message] });
+      reply.code(400).send({ message: 'Invalid password or email' });
     });
 }
 
@@ -21,7 +21,7 @@ function logout(req: FastifyRequest, reply: FastifyReply) {
       reply.code(200).send({ message: 'Successfully logged out' });
     })
     .catch((error) => {
-      reply.send(error);
+      reply.send({ errors: [error.message] });
     });
 }
 

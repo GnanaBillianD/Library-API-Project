@@ -35,34 +35,32 @@ function User(sequelize: Sequelize): UserModelDefined {
       },
       encrypted_password: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
       },
       password: {
         type: DataTypes.VIRTUAL,
         allowNull: true,
         validate: {
-            isValidPassword(
-              this: UserInstance,
-              password: string,
-              next: (err?: string) => void
-            ){
+          isValidate: function (
+            this: UserInstance,
+            password: string,
+            next: (err?: string) => void
+          ) {
             if (password) {
               if (password !== this.password_confirmation) {
                 return next("Password confirmation doesn't match password");
+              }
+            }
+            next();
           }
-        }
         },
         set(this: UserInstance, val: string) {
           if (!!val) {
             this.setDataValue('password', val),
-              this.setDataValue(
-                'encrypted_password',
-                bcrypt.hashSync(val, 10)
-              );
+              this.setDataValue('encrypted_password', bcrypt.hashSync(val, 10));
           }
         }
-      }
-    },
+      },
       password_confirmation: {
         type: DataTypes.VIRTUAL
       },

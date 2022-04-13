@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import passwordsPublicRoutes from './passwords/password-public-routes';
+import passwordsPublicRoutes from './passwords/passwords-public-routes';
 import sessionPublicRoutes from './sessions/session-public.routes';
 
 

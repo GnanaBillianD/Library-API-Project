@@ -17,8 +17,8 @@ function create(req: FastifyRequest, reply: FastifyReply) {
   if (policy.canCreate()) {
     superAdminService
       .create(params)
-      .then((result: UserInstance) => {
-        reply.code(200).send(result);
+      .then((result) => {
+        reply.code(200).send({ message: 'successfully created'});
       })
       .catch((error: FastifyError) => {
         reply.send({ errors: [error.message] });

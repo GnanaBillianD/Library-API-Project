@@ -12,11 +12,11 @@ function superAdminPrivateRoutes(
   opts: { prefix: string },
   next: (err?: Error) => void
 ) {
-  fastify.post('/super_admins', createSuperAdminOpts,SuperAdminController.create);
-  fastify.get('/super_admins', listSuperAdminOpts,SuperAdminController.list);
-  fastify.get('/super_admins/:id', viewSuperAdminOpts,SuperAdminController.view);
-  fastify.put('/super_admins/:id', updateSuperAdminOpts,SuperAdminController.update);
-  fastify.delete('/super_admins/:id', destorySuperAdminOpts,SuperAdminController.destory)
+  fastify.post('/users', createSuperAdminOpts,SuperAdminController.create);
+  fastify.get('/users', listSuperAdminOpts,SuperAdminController.list);
+  fastify.get('/users/:id', viewSuperAdminOpts,SuperAdminController.view);
+  fastify.put('/users/:id', updateSuperAdminOpts,SuperAdminController.update);
+  fastify.delete('/users/:id', destorySuperAdminOpts,SuperAdminController.destory)
   next();
 }
 export default superAdminPrivateRoutes;
