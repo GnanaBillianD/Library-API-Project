@@ -2,6 +2,7 @@ import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import { BookCreationAttributes, BookInstance } from '../../types';
 import * as BookServices from '../../services/book.service';
 import SuperAdminPolicy from '../../policies/super-admin.policy';
+import { BookListQUeryParams } from '../../types/books.controller';
 
 type createBody = { book: BookCreationAttributes };
 
@@ -25,7 +26,8 @@ function create(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function list(req: FastifyRequest, reply: FastifyReply) {
-  BookServices.list()
+  const query= req.query as BookListQUeryParams;
+  BookServices.listAndPaginate(query)
     .then((result: BookInstance) => {
       reply.code(200).send(result);
     })

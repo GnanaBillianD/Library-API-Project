@@ -73,6 +73,9 @@ function verifyToken(
   token: string,
   secretKey: string
 ): Promise<JwtResetTokenUserAttributes> {
+  console.log("token is======================?", token )
+  console.log("key is=========================?",secretKey);
+  
   return new Promise((resolve, reject) =>
     jwtVerify(
       token,
@@ -81,6 +84,7 @@ function verifyToken(
         if (err) {
           reject(err);
         } else {
+          console.log("log=-==================?")
           resolve(decoded);
         }
       }

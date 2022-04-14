@@ -2,7 +2,7 @@ const updateSuperAdminOpts = {
     schema: {
       body: {
         type: 'object',
-        required: ['superAdmin'],
+        required: ['users'],
         properties: {
           superAdmin: {
             type: 'object',

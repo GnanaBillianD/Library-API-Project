@@ -44,10 +44,11 @@ async function decryptUserAttrsFromInvitationToken(invitationToken, type) {
   if (!token) {
     throw new Error('No access token found');
   }
-  const { JWT_SECRET_KEY = '' } = process.env;
   try {
+    const { JWT_SECRET_KEY = '' } = process.env;
+    console.log("Sceret----------------", JWT_SECRET_KEY)
     const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
-    console.log("uersAttrs-----",userAttrs.type)
+    console.log("uersAttrs-----",userAttrs)
     if (!userAttrs || type !== userAttrs.type) {
       throw new Error('Invalid access token');
     }

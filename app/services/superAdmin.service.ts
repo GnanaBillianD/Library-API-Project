@@ -19,6 +19,7 @@ function sendUserInvitation(user: UserInstance) {
       expiresIn: 6000
     }
   );
+  console.log("user????????????",user )
   sendInvitationLink(user, token);
 }
 

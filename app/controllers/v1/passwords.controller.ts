@@ -30,6 +30,7 @@ function sendResetPasswordLink(req: FastifyRequest, reply: FastifyReply) {
 function resetPassword(req: FastifyRequest, reply: FastifyReply) {
   const params = req.body as ResetPasswordParams;
   const token = req.headers.authorization || '';
+  console.log("header===========>", token)
   verifyAndResetPassword(token, params)
     .then((user) => {
       reply.code(200).send(user);
