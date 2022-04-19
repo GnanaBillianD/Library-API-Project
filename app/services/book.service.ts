@@ -10,6 +10,7 @@ import { globalSearchQuery } from '../queries/book-global-search.query';
 import columnSearchQuery from '../queries/book-clolumn-search.query';
 import { paginate } from '../lib/paginator-result';
 import { paginatorResult } from '../lib/paginator-result';
+import { EmptyResultError } from 'sequelize';
 
 const { Book } = models;
 
@@ -46,7 +47,7 @@ function listAndPaginate(query: BookListQUeryParams) {
 async function getById(id) {
   const book = await Book.findOne({ where: { id } });
   if (!book) {
-    throw new Error('Book not found');
+    throw new EmptyResultError('Book not found');
   }
   return book;
 }
@@ -55,7 +56,7 @@ async function update(id, params: BookCreationAttributes) {
   const book = await Book.findOne({ where: { id } });
   const books = await Book.findOne({ where: { name: params.name } });
   if (!book) {
-    throw new Error('Book not found');
+    throw new EmptyResultError('Book not found');
   }
   if (books) {
     throw new Error('this book name already exist');
@@ -66,7 +67,7 @@ async function update(id, params: BookCreationAttributes) {
 async function destoryById(id) {
   const book = await Book.findOne({ where: { id } });
   if (!book) {
-    throw new Error('Book not found');
+    throw new EmptyResultError('Book not found');
   }
   return book.destory;
 }

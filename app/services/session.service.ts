@@ -1,4 +1,4 @@
-import { UserInstance } from '../models/user';
+import { UserInstance } from '../types';
 import {
   JwtResetTokenUserAttributes,
   LoginServiceParams
@@ -6,6 +6,8 @@ import {
 import models from '../models';
 import bcrypt from 'bcrypt';
 import { sign as jwtSignin, verify as jwtVerify } from 'jsonwebtoken';
+import { SessionError } from '../exceptions';
+import { EmptyResultError } from 'sequelize';
 
 const { User } = models;
 
@@ -13,12 +15,12 @@ async function signin(attrs: LoginServiceParams) {
   let currentUser: UserInstance;
   try {
     currentUser = await getConfirmedUserByEmail(attrs.email);
-    validatePassword(currentUser, attrs.password);
-    const accessToken = await markSignin(currentUser, attrs);
-    return accessToken;
   } catch (error) {
-    throw new Error('Invalid email or password');
+    throw new SessionError('Invalid email or password');
   }
+  validatePassword(currentUser, attrs.password);
+  const accessToken = await markSignin(currentUser, attrs);
+  return accessToken;
 }
 
 function getConfirmedUserByEmail(attrsEmail: string): Promise<UserInstance> {
@@ -28,7 +30,7 @@ function getConfirmedUserByEmail(attrsEmail: string): Promise<UserInstance> {
     if (user) {
       return user;
     }
-    throw new Error('User not found');
+    throw new EmptyResultError('User not found');
   });
 }
 
@@ -38,7 +40,7 @@ function validatePassword(currentUser: UserInstance, password: string) {
     currentUser.encrypted_password
   );
   if (!isPasswordMatched) {
-    throw new Error('Invalid email or password');
+    throw new SessionError('Invalid email or password');
   }
 }
 
@@ -73,9 +75,9 @@ function verifyToken(
   token: string,
   secretKey: string
 ): Promise<JwtResetTokenUserAttributes> {
-  console.log("token is======================?", token )
-  console.log("key is=========================?",secretKey);
-  
+  console.log('token is======================?', token);
+  console.log('key is=========================?', secretKey);
+
   return new Promise((resolve, reject) =>
     jwtVerify(
       token,
@@ -84,7 +86,7 @@ function verifyToken(
         if (err) {
           reject(err);
         } else {
-          console.log("log=-==================?")
+          console.log('log=-==================?');
           resolve(decoded);
         }
       }

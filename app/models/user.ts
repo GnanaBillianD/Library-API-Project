@@ -1,23 +1,16 @@
 'use strict';
-import { DataTypes, Model, Sequelize, ModelDefined } from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize';
 import {
-  UserAttributes,
-  UserCreationAttributes,
+  UserInstance,
+  UserStatic,
   USER_ROLE
 } from '../types/user';
+import { isEmailUnique, isValidPassword } from './validation/user.model.validators';
 import bcrypt from 'bcrypt';
 
-export interface UserInstance
-  extends Model<UserAttributes, UserCreationAttributes>,
-    UserAttributes {
-  isSuperAdmin(): boolean;
-  isParkAdmin(): boolean;
-  isConsumer(): boolean;
-}
+// type UserModelDefined = ModelDefined<UserAttributes, UserCreationAttributes>;
 
-type UserModelDefined = ModelDefined<UserAttributes, UserCreationAttributes>;
-
-function User(sequelize: Sequelize): UserModelDefined {
+function User(sequelize: Sequelize): UserStatic {
   const user = sequelize.define(
     'User',
     {
@@ -30,8 +23,23 @@ function User(sequelize: Sequelize): UserModelDefined {
         allowNull: false
       },
       email: {
-        type: DataTypes.STRING,
-        allowNull: false
+        type: new DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          isEmailUnique,
+          isEmail: {
+            // args: true,
+            msg: 'Invalid email'
+          },
+          len: {
+            args: [1, 100] as readonly [number, number],
+            msg: 'Email length should be 1 to 100 characters'
+          },
+          notNull: {
+            // args: true,
+            msg: 'Email cannot be empty'
+          }
+        }
       },
       encrypted_password: {
         type: DataTypes.STRING,
@@ -41,18 +49,7 @@ function User(sequelize: Sequelize): UserModelDefined {
         type: DataTypes.VIRTUAL,
         allowNull: true,
         validate: {
-          isValidate: function (
-            this: UserInstance,
-            password: string,
-            next: (err?: string) => void
-          ) {
-            if (password) {
-              if (password !== this.password_confirmation) {
-                return next("Password confirmation doesn't match password");
-              }
-            }
-            next();
-          }
+          isValidPassword,
         },
         set(this: UserInstance, val: string) {
           if (!!val) {
@@ -77,7 +74,7 @@ function User(sequelize: Sequelize): UserModelDefined {
       deletedAt: 'deleted_at',
       paranoid: true
     }
-  ) as UserModelDefined;
+  ) as UserStatic;
 
   user.prototype.isSuperAdmin = function (): boolean {
     return this.role === USER_ROLE.SUPER_ADMIN;

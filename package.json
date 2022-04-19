@@ -24,6 +24,8 @@
     "nodemailer": "^6.7.3",
     "pg": "^8.7.3",
     "pg-hstore": "^2.3.4",
+    "pino": "^7.10.0",
+    "pino-pretty": "^7.6.1",
     "sequelize": "^6.18.0"
   },
   "devDependencies": {

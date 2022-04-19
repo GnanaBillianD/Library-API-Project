@@ -9,6 +9,8 @@ import {
 import bcrypt from 'bcrypt';
 import { TOKEN_TYPE } from '../config/constants';
 import { verifyToken } from './session.service';
+import { EmptyResultError } from 'sequelize';
+import { SessionError } from '../exceptions';
 
 const { User } = models;
 
@@ -18,7 +20,7 @@ function getUserByEmail(email: string) {
       if (user) {
         return user;
       }
-      throw new Error('User not found');
+      throw new EmptyResultError('User not found');
     }
   );
 }
@@ -37,27 +39,27 @@ async function sendResetPasswordInstruction(email: string) {
   sendResetPasswordLink(user, token);
 }
 
-async function decryptUserAttrsFromInvitationToken(invitationToken, type) {
-  // console.log("invitationToken-------------------->", token)
+async function decryptUserAttrsFromInvitationToken(invitationToken: string, type: string) {
+  console.log("invitationToken-------------------->", invitationToken)
   const token = invitationToken
-  console.log("invitation=--=-=-=-=-=-=-=-", invitationToken)
+  console.log("invitation=--=-=-=-=-=-=-=-", token)
   if (!token) {
-    throw new Error('No access token found');
+    throw new SessionError('No access token found');
   }
   try {
     const { JWT_SECRET_KEY = '' } = process.env;
-    console.log("Sceret----------------", JWT_SECRET_KEY)
+    // console.log("Sceret----------------", JWT_SECRET_KEY)
     const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
-    console.log("uersAttrs-----",userAttrs)
+    // console.log("uersAttrs-----",userAttrs)
     if (!userAttrs || type !== userAttrs.type) {
-      throw new Error('Invalid access token');
+      throw new SessionError('Invalid access token');
     }
     return userAttrs;
   } catch (error: any) {
     if (error.message === 'jwt expired') {
-      throw new Error('Access token has been expired');
+      throw new SessionError('Access token has been expired');
     }
-    throw new Error('Invalid access token');
+    throw new SessionError('Invalid access token');
   }
 }
 
@@ -88,7 +90,7 @@ async function verifyAndChangePassword(
     currentUser.encrypted_password
   );
   if (!isPasswordMatched) {
-    throw new Error('Invalid current_password');
+    throw new SessionError('Invalid current_password');
   }
   return currentUser.update({ ...passwordParams });
 }

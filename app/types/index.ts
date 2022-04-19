@@ -1,5 +1,5 @@
 import { BookInstance } from '../models/book';
-import { UserInstance } from '../models/user';
+import { UserInstance } from '../types/user';
 
 export { BookInstance };
 export * from './book';

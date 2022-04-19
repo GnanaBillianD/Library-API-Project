@@ -1,9 +1,9 @@
-import { UserCreationAttributes, UserInstance } from '../types';
+import { UserInstance } from '../types';
 import models from '../models';
-import bcrypt from 'bcrypt';
 import { sendInvitationLink } from './mailer.service';
 import { sign as jwtSignin } from 'jsonwebtoken';
 import { TOKEN_TYPE } from '../config/constants';
+import { EmptyResultError } from 'sequelize';
 
 const { UserInstance } = models;
 
@@ -19,18 +19,18 @@ function sendUserInvitation(user: UserInstance) {
       expiresIn: 6000
     }
   );
-  console.log("user????????????",user )
+  console.log('user????????????', user);
   sendInvitationLink(user, token);
 }
 
 async function create(attributes) {
   const user = await User.findOne({
-    where: { email: attributes.superAdmin.email }
+    where: { email: attributes.users.email }
   });
   if (user) {
     throw new Error('this user email already exist');
   }
-  const users = await User.create(attributes.superAdmin).then((user) => {
+  const users = await User.create(attributes.users).then((user) => {
     sendUserInvitation(user);
     return user;
   });
@@ -43,7 +43,7 @@ function list() {
 async function getById(id) {
   const user = await User.findOne({ where: { id } });
   if (!user) {
-    throw new Error('user not found');
+    throw new EmptyResultError('user not found');
   }
   return user;
 }
@@ -54,7 +54,7 @@ async function update(id, params) {
     where: { email: params.superAdmin.email }
   });
   if (!user) {
-    throw new Error('User not found');
+    throw new EmptyResultError('User not found');
   }
   if (users) {
     throw new Error('this user email already exist');
@@ -65,7 +65,7 @@ async function update(id, params) {
 async function destoryById(id) {
   const user = await User.findOne({ where: { id } });
   if (!user) {
-    throw new Error('User not found');
+    throw new EmptyResultError('User not found');
   }
   return user.destory;
 }
