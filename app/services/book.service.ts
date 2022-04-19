@@ -6,7 +6,7 @@ import {
 } from '../types/books.controller';
 import { size, map } from 'lodash';
 import { Q_MINIMUM_SIZE } from '../config/constants';
-import { globalSearchQuery } from '../queries/book-global-search.query';
+import globalSearchQuery from '../queries/book-global-search.query';
 import columnSearchQuery from '../queries/book-clolumn-search.query';
 import { paginate } from '../lib/paginator-result';
 import { paginatorResult } from '../lib/paginator-result';

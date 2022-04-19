@@ -8,7 +8,8 @@ const { User } = models;
 const { JWT_SECRET_KEY = '' } = process.env;
 
 function getAuthToken(query: any) {
-  const { token } = query as { token: string };
+  console.log("q------------",query)
+  const token  = JSON.parse(JSON.stringify(query.q));
   return token;
 }
 
@@ -36,7 +37,10 @@ const sseAuthenticate = (fastify: FastifyInstance) => {
   fastify.addHook(
     'preHandler',
     async (request: FastifyRequest, reply: FastifyReply) => {
+      console.log("request-----------",request.query)
       const token = getAuthToken(request.query);
+      console.log("token--------",token);
+      
       if (!token) {
         const error = {
           errors: ['You need to sign-in to access this page']
@@ -45,6 +49,7 @@ const sseAuthenticate = (fastify: FastifyInstance) => {
       } else {
         try {
           const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
+          console.log("userAttrs--------",userAttrs)
           const user = await User.findOne({
             where: { email: userAttrs.email }
           });

@@ -3,3 +3,5 @@ export const TOKEN_TYPE = {
 };
 
 export const Q_MINIMUM_SIZE = 1;
+
+export const NOTIFICATION_LIMIT = 5;

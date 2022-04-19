@@ -1,4 +1,4 @@
-import { Model, BuildOptions } from "sequelize";
+import { Model, BuildOptions } from 'sequelize';
 
 export const enum USER_ROLE {
   SUPER_ADMIN = 'Super Admin',

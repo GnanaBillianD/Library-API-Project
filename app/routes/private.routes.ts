@@ -11,19 +11,22 @@ declare module 'fastify' {
   interface FastifyRequest {
     currentUser: UserInstance;
   }
+  interface FastifyReply {
+    sse: (obj: any) => void;
+  }
 }
 
 function privateRoutes(
   fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,
   opts: { prefix: string },
-  next: (err?: Error)=> void
-){
+  next: (err?: Error) => void
+) {
   userAuthenticate(fastify);
-    fastify.register(bookPrivateRoutes);
-    fastify.register(superAdminPrivateRoutes);
-    fastify.register(sessionPrivateRoutes);
-    fastify.register(passwordsPrivateRoutes)
-    next();
+  fastify.register(bookPrivateRoutes);
+  fastify.register(superAdminPrivateRoutes);
+  fastify.register(sessionPrivateRoutes);
+  fastify.register(passwordsPrivateRoutes);
+  next();
 }
 
 export default privateRoutes;
