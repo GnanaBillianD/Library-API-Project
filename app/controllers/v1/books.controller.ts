@@ -67,6 +67,15 @@ function update(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
+function bulkupload(req: FastifyRequest, reply: FastifyReply){
+  const files = req.files
+  console.log(files)
+  let fileArr = []
+    fileArr.push(files)
+  
+  reply.send(fileArr)
+}
+
 function destory(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
   const policy = new SuperAdminPolicy(req.currentUser);
@@ -85,4 +94,4 @@ function destory(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-export { create, list, update, view, destory };
+export { create, list, update, view, destory, bulkupload };
