@@ -22,4 +22,7 @@ export default class SuperAdminPolicy {
   canDelete() {
     return this.currentUser.isSuperAdmin();
   }
+  canCreateBooks() {
+    return this.currentUser.isSuperAdmin();
+  }
 }

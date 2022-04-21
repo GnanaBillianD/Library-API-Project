@@ -18,7 +18,11 @@ function bookPrivateRoutes(
   fastify.get('/books/:id', viewBookOpts, BookController.view);
   fastify.put('/books/:id', updatedBookOpts, BookController.update);
   fastify.delete('/books/:id', destoryBookOpts, BookController.destory);
-  fastify.post('/books/buk_upload', uploadBulkRouterOpts, BookController.bulkupload);
+  fastify.post(
+    '/books/buk_upload',
+    uploadBulkRouterOpts,
+    BookController.bulkupload
+  );
   next();
 }
 export default bookPrivateRoutes;

@@ -3,6 +3,8 @@ import { BookCreationAttributes, BookInstance } from '../../types';
 import * as BookServices from '../../services/book.service';
 import SuperAdminPolicy from '../../policies/super-admin.policy';
 import { BookListQUeryParams } from '../../types/books.controller';
+import { ValidationError } from 'sequelize';
+import BulkUploadError from '../../exceptions/bulk-upload-error';
 
 type createBody = { book: BookCreationAttributes };
 
@@ -26,7 +28,7 @@ function create(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function list(req: FastifyRequest, reply: FastifyReply) {
-  const query= req.query as BookListQUeryParams;
+  const query = req.query as BookListQUeryParams;
   BookServices.listAndPaginate(query)
     .then((result: BookInstance) => {
       reply.code(200).send(result);
@@ -67,13 +69,22 @@ function update(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-function bulkupload(req: FastifyRequest, reply: FastifyReply){
-  const files = req.files
-  console.log(files)
-  let fileArr = []
-    fileArr.push(files)
-  
-  reply.send(fileArr)
+async function bulkupload(req: FastifyRequest, reply: FastifyReply) {
+  const attrs = await req.file();
+  const policy = new SuperAdminPolicy(req.currentUser);
+  if (policy.canCreateBooks()) {
+    BookServices.bookBulkUpload(attrs)
+      .then(() => {
+        reply.code(201).send({ message: 'Books created successfully' });
+      })
+      .catch((error: FastifyError) => {
+        reply.code(422).send({ errors: [error.message] });
+      });
+  } else {
+    reply
+      .code(403)
+      .send({ errors: ['You are not allowed to perform this action'] });
+  }
 }
 
 function destory(req: FastifyRequest, reply: FastifyReply) {
