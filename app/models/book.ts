@@ -31,6 +31,17 @@ function Book(sequelize: Sequelize): BookModelDefined {
       notes: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      created_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      deleted_at: {
+        type: DataTypes.DATE
       }
     },
     {

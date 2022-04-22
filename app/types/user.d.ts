@@ -13,6 +13,9 @@ export interface UserAttributes {
   password?: string;
   password_confirmation?: string;
   encrypted_password: string;
+  access_token:string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export type UserCreationAttributes = Pick<

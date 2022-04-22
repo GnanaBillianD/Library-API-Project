@@ -68,15 +68,15 @@ function update(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function destory(req: FastifyRequest, reply: FastifyReply) {
-  const { id } = req.params as { id: number };
+  const { id } = req.params as { id: number };  
   const policy = new SuperAdminPolicy(req.currentUser);
   if (policy.canDelete()) {
     BookServices.destoryById(id)
       .then(() => {
         reply.code(200).send({ message: 'successfully deleted' });
       })
-      .catch((error: FastifyError) => {
-        reply.send({ errors: [error.message] });
+      .catch((err) => {
+        reply.send(err);
       });
   } else {
     reply

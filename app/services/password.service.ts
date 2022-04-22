@@ -63,6 +63,7 @@ async function decryptUserAttrsFromInvitationToken(invitationToken: string, type
   }
 }
 
+// 
 async function verifyAndResetPassword(
   resetToken: string,
   passwordParams: ResetPasswordParams

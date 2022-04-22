@@ -22,7 +22,7 @@ function sendUserInvitation(user: UserInstance) {
   console.log('user????????????', user);
   sendInvitationLink(user, token);
 }
-
+//
 async function create(attributes) {
   const user = await User.findOne({
     where: { email: attributes.users.email }
@@ -30,7 +30,7 @@ async function create(attributes) {
   if (user) {
     throw new Error('this user email already exist');
   }
-  const users = await User.create(attributes.users).then((user) => {
+  await User.create(attributes.users).then((user) => {
     sendUserInvitation(user);
     return user;
   });

@@ -1,3 +1,5 @@
+import { headers } from "../shared-schema/auth-header.schema";
+
 const loginRouterOpts = {
     schema: {
       body: {
@@ -9,6 +11,7 @@ const loginRouterOpts = {
         }
       },
       response: {
+        headers,
         200: {
           description: 'Successfully logged in',
           type: 'object',

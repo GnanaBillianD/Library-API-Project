@@ -65,11 +65,11 @@ async function update(id, params: BookCreationAttributes) {
 }
 
 async function destoryById(id) {
-  const book = await Book.findOne({ where: { id } });
+  const book = await Book.findByPk(id);
   if (!book) {
-    throw new EmptyResultError('Book not found');
+    throw new EmptyResultError('Book Not Found');
   }
-  return book.destory;
+  return book.destroy();
 }
 
 export { create, listAndPaginate, update, getById, destoryById };

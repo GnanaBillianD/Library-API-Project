@@ -12,15 +12,14 @@ import { EmptyResultError } from 'sequelize';
 const { User } = models;
 
 async function signin(attrs: LoginServiceParams) {
-  let currentUser: UserInstance;
   try {
-    currentUser = await getConfirmedUserByEmail(attrs.email);
+    const currentUser = await getConfirmedUserByEmail(attrs.email);
+    validatePassword(currentUser, attrs.password);
+    const accessToken = await markSignin(currentUser, attrs);
+    return accessToken;
   } catch (error) {
     throw new SessionError('Invalid email or password');
   }
-  validatePassword(currentUser, attrs.password);
-  const accessToken = await markSignin(currentUser, attrs);
-  return accessToken;
 }
 
 function getConfirmedUserByEmail(attrsEmail: string): Promise<UserInstance> {
@@ -48,14 +47,7 @@ async function markSignin(user: UserInstance, attrs: LoginServiceParams) {
   const { email } = user;
   const { JWT_SECRET_KEY } = process.env;
   const token = jwtSignin({ email }, JWT_SECRET_KEY, { expiresIn: 180000 });
-  await User.update(
-    { access_token: token },
-    {
-      where: {
-        email: user.email
-      }
-    }
-  );
+  await user.update({ access_token: token });
   return token;
 }
 

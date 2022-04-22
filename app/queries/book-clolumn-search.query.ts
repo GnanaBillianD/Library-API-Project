@@ -6,7 +6,7 @@ const { Op } = Sequelize;
 
 const columnSearchQuery = (query: BookListQUeryParams) => {
   const { id, name, category, author, amount, notes } = query;
-  const text = query.q;
+  const text = query.q;//?
   const searchQueries: any = [];
 
   if (id !== null && typeof id !== 'undefined') {
