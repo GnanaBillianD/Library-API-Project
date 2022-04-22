@@ -16,15 +16,16 @@ import { pipeline } from 'stream';
 import { createWriteStream, unlinkSync } from 'fs';
 import readXlsxFile from 'read-excel-file/node';
 import BulkUploadError from '../exceptions/bulk-upload-error';
+import db from '../models';
 
 const pump = util.promisify(pipeline);
 const { Book } = models;
 
-const env = process.env.NODE_ENV || 'development';
-// tslint:disable-next-line: no-var-requires
-const config = require(`${__dirname}/../../db/config.json`)[env];
+// const env = process.env.NODE_ENV || 'development';
+// // tslint:disable-next-line: no-var-requires
+// const config = require(`${__dirname}/../../db/config.json`)[env];
 
-const db = new Sequelize(process.env[config.use_env_variable] as string);
+// const db = new Sequelize(process.env[config.use_env_variable] as string);
 
 async function create(attributes: BookCreationAttributes) {
   const book = await Book.findOne({ where: { name: attributes.name } });
@@ -77,21 +78,25 @@ async function update(id, params: BookCreationAttributes) {
 }
 
 async function bookBulkUpload(attrs) {
-  console.log('attrs================>', attrs);
+  console.log('attrs================>', attrs.file);
   const { mimetype: fileType } = attrs;
   if (!(fileType.includes('excel') || fileType.includes('spreadsheetml'))) {
     throw new Error('Kindly upload only excel file');
   }
   const fileName = `${new Date().getTime()}.xlsx`;
   const filePath = `${__dirname}/../assets/books/${fileName}`;
+  console.log('file--------------', filePath);
 
-  const t = await db.transaction();
-  // const t = await db.sequelize.transaction();
+  // const t = await db.transaction();
+  const t = await db.sequelize.transaction();
 
   try {
+    console.log('------------------------------------');
     await pump(attrs.file, createWriteStream(filePath));
 
     const bookList = await readXlsxFile(filePath);
+    console.log('booklist is--------------', bookList);
+
     if (!(size(bookList) > 1)) {
       throw new Error('Kindly provide books data');
     }
@@ -105,32 +110,31 @@ async function bookBulkUpload(attrs) {
         'Invalid template in excel file. Kindly upload the file with valid column name'
       );
     }
-    bookList.shift();
 
-    const books: any = [];
     const allBooks = map(bookList, async (row, index: number) => {
-      const id = index + 1;
       const name = row[0];
       const category = row[1];
       const author = row[2];
-      const amount = row[3];
+      const amount = row[3].DECIMAL;
       const notes = row[4];
 
       const attributes = {
-        id,
         name,
         category,
         author,
         amount,
         notes
       };
-      books.push(attributes);
-      await Book.update(attributes, { transaction: t });
-      await t.commit();
-      unlinkSync(filePath);
-      await Promise.all(allBooks);
-    });
+      console.log("attrrr-----",attributes);
+      
+      await Book.create(attributes, { transaction: t });
+    });    
+    await Promise.all(allBooks);
+    await t.commit();
+    unlinkSync(filePath);
   } catch (error) {
+    console.log('error is', error);
+
     await t.rollback();
     unlinkSync(filePath);
     throw new BulkUploadError(error);
