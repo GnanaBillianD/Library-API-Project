@@ -1,4 +1,4 @@
-const viewSuperAdminOpts = {
+const viewUserOpts = {
   schema: {
     response: {
       201: {
@@ -18,4 +18,4 @@ const viewSuperAdminOpts = {
     }
   }
 };
-export default viewSuperAdminOpts;
+export default viewUserOpts;

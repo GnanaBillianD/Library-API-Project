@@ -8,8 +8,8 @@ const { User } = models;
 const { JWT_SECRET_KEY = '' } = process.env;
 
 function getAuthToken(query: any) {
-  console.log("q------------",query)
-  const token  = JSON.parse(JSON.stringify(query.q));
+  const { token } = query as { token: string };
+  // const token  = JSON.parse(JSON.stringify(query.token));
   return token;
 }
 

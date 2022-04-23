@@ -4,7 +4,7 @@ import { IncomingMessage, Server, ServerResponse } from "http";
 import { connect } from "../../controllers/v1/sse.controller";
 import sseAlertsRouterOpts from "./sse-alert-router-option";
 
-function ssePublicRoutes(
+function ssePrivateRoutes(
     fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,
     opts: {prefix: string},
     next: (err?: Error)=> void
@@ -14,4 +14,4 @@ function ssePublicRoutes(
     next();
 }
 
-export default ssePublicRoutes;
+export default ssePrivateRoutes;

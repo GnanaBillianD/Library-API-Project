@@ -4,7 +4,7 @@ import { signin, markLogout } from '../../services/session.service';
 
 function login(req: FastifyRequest, reply: FastifyReply) {
   const { email, password } = req.body as LoginBodyParams;
-  return signin({ email, password })
+  signin({ email, password })
     .then((accessToken) => {
       reply.header('Authorization', `Bearer ${accessToken}`);
       reply.code(200).send({ message: 'Login successfully' });

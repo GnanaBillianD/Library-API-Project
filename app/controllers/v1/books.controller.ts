@@ -1,16 +1,14 @@
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import { BookCreationAttributes, BookInstance } from '../../types';
 import * as BookServices from '../../services/book.service';
-import SuperAdminPolicy from '../../policies/super-admin.policy';
+import UserPolicy from '../../policies/user.policy';
 import { BookListQUeryParams } from '../../types/books.controller';
-import { ValidationError } from 'sequelize';
-import BulkUploadError from '../../exceptions/bulk-upload-error';
 
 type createBody = { book: BookCreationAttributes };
 
 function create(req: FastifyRequest, reply: FastifyReply) {
   const { currentUser, body } = req;
-  const policy = new SuperAdminPolicy(currentUser);
+  const policy = new UserPolicy(currentUser);
   const params = body as createBody;
   if (policy.canView()) {
     BookServices.create(params.book)
@@ -52,7 +50,7 @@ function view(req: FastifyRequest, reply: FastifyReply) {
 function update(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
   const { body } = req;
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   const params = body as createBody;
   if (policy.canUpdate()) {
     BookServices.update(id, params.book)
@@ -71,7 +69,7 @@ function update(req: FastifyRequest, reply: FastifyReply) {
 
 async function bulkupload(req: FastifyRequest, reply: FastifyReply) {
   const attrs = await req.file();
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canCreateBooks()) {
     BookServices.bookBulkUpload(attrs)
       .then(() => {
@@ -89,7 +87,7 @@ async function bulkupload(req: FastifyRequest, reply: FastifyReply) {
 
 function destory(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canDelete()) {
     BookServices.destoryById(id)
       .then(() => {

@@ -1,10 +1,13 @@
-const createSuperAdminOpts = {
+import { headers } from "../shared-schema/auth-header.schema";
+
+const createUserOpts = {
   schema: {
+    headers,
     body: {
       type: 'object',
       required: ['users'],
       properties: {
-        superAdmin: {
+        user: {
           type: 'object',
           properties: {
             name: { type: 'string' },
@@ -16,6 +19,7 @@ const createSuperAdminOpts = {
       }
     },
     response: {
+      headers,
       201: {
         description: 'Successful response',
         type: 'object',
@@ -33,4 +37,4 @@ const createSuperAdminOpts = {
     }
   }
 };
-export default createSuperAdminOpts;
+export default createUserOpts;

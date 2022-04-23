@@ -25,7 +25,7 @@ function Book(sequelize: Sequelize): BookModelDefined {
         allowNull: true
       },
       amount: {
-        type: DataTypes.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10,2),
         allowNull: true
       },
       notes: {

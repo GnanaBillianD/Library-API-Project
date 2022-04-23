@@ -1,6 +1,6 @@
 import { UserInstance } from '../types';
 
-export default class SuperAdminPolicy {
+export default class UserPolicy {
   constructor(private currentUser: UserInstance) {}
 
   canCreate() {

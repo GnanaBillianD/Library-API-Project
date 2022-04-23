@@ -1,5 +1,8 @@
+import { headers } from "../shared-schema/auth-header.schema";
+
 const updateBookOpts = {
   schema: {
+    headers,
     body: {
       type: 'object',
       required: ['book'],
@@ -17,6 +20,7 @@ const updateBookOpts = {
       }
     },
     response: {
+      headers,
       201: {
         description: 'Successful response',
         type: 'object',

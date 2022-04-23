@@ -10,7 +10,7 @@ import globalSearchQuery from '../queries/book-global-search.query';
 import columnSearchQuery from '../queries/book-clolumn-search.query';
 import { paginate } from '../lib/paginator-result';
 import { paginatorResult } from '../lib/paginator-result';
-import { EmptyResultError, Sequelize } from 'sequelize';
+import { DecimalDataType, EmptyResultError, Sequelize } from 'sequelize';
 import util from 'util';
 import { pipeline } from 'stream';
 import { createWriteStream, unlinkSync } from 'fs';
@@ -30,7 +30,7 @@ const { Book } = models;
 async function create(attributes: BookCreationAttributes) {
   const book = await Book.findOne({ where: { name: attributes.name } });
   if (book) {
-    throw new Error('this book name already exist');
+    throw new Error('book name already exist');
   }
   return Book.create(attributes);
 }
@@ -72,7 +72,7 @@ async function update(id, params: BookCreationAttributes) {
     throw new EmptyResultError('Book not found');
   }
   if (books) {
-    throw new Error('this book name already exist');
+    throw new Error('book name already exist');
   }
   return book.update(params);
 }
@@ -111,11 +111,11 @@ async function bookBulkUpload(attrs) {
       );
     }
 
-    const allBooks = map(bookList, async (row, index: number) => {
+    const allBooks = map(bookList, async (row) => {
       const name = row[0];
       const category = row[1];
       const author = row[2];
-      const amount = row[3].DECIMAL;
+      const amount = Math.floor(row[3]);
       const notes = row[4];
 
       const attributes = {

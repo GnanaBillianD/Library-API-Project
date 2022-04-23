@@ -4,7 +4,7 @@ import {
   UserInstance,
   UserStatic,
   USER_ROLE
-} from '../types/user';
+} from '../types/users';
 import { isEmailUnique, isValidPassword } from './validation/user.model.validators';
 import bcrypt from 'bcrypt';
 

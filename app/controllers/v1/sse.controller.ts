@@ -1,4 +1,4 @@
-import SSEPolicy from '../../routes/sse/sse.policy';
+import SSEPolicy from '../../policies/sse.policy';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { handleConnection } from '../../services/sse.service';
 

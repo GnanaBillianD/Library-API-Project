@@ -1,5 +1,5 @@
 import { Op } from 'sequelize';
-import { UserInstance, UserStatic } from '../../types';
+import { UserInstance, UserStatic } from '../../types/users';
 
 export function isEmailUnique(
   this: UserInstance,

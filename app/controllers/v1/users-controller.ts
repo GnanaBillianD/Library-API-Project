@@ -1,27 +1,32 @@
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import { UserInstance } from '../../types';
-import * as superAdminService from '../../services/superAdmin.service';
-import SuperAdminPolicy from '../../policies/super-admin.policy';
 import {
-  CreateSuperAdminsParams,
-  UpdateSuperAdminsParams
-} from '../../types/super-admins.controller';
+  create as userCreate,
+  list as usersList,
+  getById as userDetails,
+  update as userUpdate,
+  destoryById
+} from '../../services/users.service';
+import UserPolicy from '../../policies/user.policy';
+import {
+  CreateUsersParams,
+  UpdateUsersParams
+} from '../../types/users-controller';
 
-type CreateSuperAdminBody = { super_admin: CreateSuperAdminsParams };
-type UpdateSuperAdminBody = { super_admin: UpdateSuperAdminsParams };
+type CreateUsersBody = { super_admin: CreateUsersParams };
+type UpdateUsersBoday = { super_admin: UpdateUsersParams };
 
 function create(req: FastifyRequest, reply: FastifyReply) {
   const { currentUser, body } = req;
-  const policy = new SuperAdminPolicy(currentUser);
-  const params = body as CreateSuperAdminBody;
+  const policy = new UserPolicy(currentUser);
+  const params = body as CreateUsersBody;   
   if (policy.canCreate()) {
-    superAdminService
-      .create(params)
-      .then((result) => {
-        reply.code(200).send({ message: 'successfully created'});
+    userCreate(params)
+      .then(() => {
+        reply.code(200).send({ message: 'successfully created' });
       })
       .catch((error: FastifyError) => {
-        reply.send({ errors: [error.message] });
+        reply.code(422).send({ errors: [error.message] });
       });
   } else {
     reply
@@ -31,10 +36,9 @@ function create(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function list(req: FastifyRequest, reply: FastifyReply) {
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canList()) {
-    superAdminService
-      .list()
+    usersList()
       .then((result: UserInstance) => {
         reply.code(200).send(result);
       })
@@ -50,10 +54,9 @@ function list(req: FastifyRequest, reply: FastifyReply) {
 
 function view(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canView()) {
-    superAdminService
-      .getById(id)
+    userDetails(id)
       .then((result: UserInstance) => {
         reply.code(200).send(result);
       })
@@ -70,11 +73,10 @@ function view(req: FastifyRequest, reply: FastifyReply) {
 function update(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
   const { currentUser, body } = req;
-  const policy = new SuperAdminPolicy(currentUser);
-  const params = body as CreateSuperAdminBody;  
+  const policy = new UserPolicy(currentUser);
+  const params = body as UpdateUsersBoday;
   if (policy.canUpdate()) {
-    superAdminService
-      .update(id, params)
+    userUpdate(id, params)
       .then((result: UserInstance) => {
         reply.code(200).send(result);
       })
@@ -90,10 +92,9 @@ function update(req: FastifyRequest, reply: FastifyReply) {
 
 function destory(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canDelete()) {
-    superAdminService
-      .destoryById(id)
+    destoryById(id)
       .then(() => {
         reply.code(200).send({ message: 'successfully deleted' });
       })

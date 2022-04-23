@@ -90,7 +90,7 @@ async function verifyAndChangePassword(
     currentUser.encrypted_password
   );
   if (!isPasswordMatched) {
-    throw new SessionError('Invalid current_password');
+    throw new SessionError('Invalid current password');
   }
   return currentUser.update({ ...passwordParams });
 }

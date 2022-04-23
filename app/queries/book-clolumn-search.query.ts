@@ -6,14 +6,13 @@ const { Op } = Sequelize;
 
 const columnSearchQuery = (query: BookListQUeryParams) => {
   const { id, name, category, author, amount, notes } = query;
-  const text = query.q;
   const searchQueries: any = [];
 
   if (id !== null && typeof id !== 'undefined') {
     const idQuery = Sequelize.where(
       Sequelize.cast(Sequelize.col('Book.id'), 'varchar'),
       {
-        [Op.iLike]: `${text}%`
+        [Op.iLike]: `${id}%`
       }
     );
     searchQueries.push(idQuery);
@@ -38,7 +37,7 @@ const columnSearchQuery = (query: BookListQUeryParams) => {
     const amountQuery = Sequelize.where(
       Sequelize.cast(Sequelize.col('Book.amount'), 'varchar'),
       {
-        [Op.iLike]: `%${text}%`
+        [Op.iLike]: `%${amount}%`
       }
     );
     searchQueries.push(amountQuery);
