@@ -1,10 +1,13 @@
-const updateSuperAdminOpts = {
+import { headers } from "../shared-schema/auth-header.schema";
+
+const updateUserOpts = {
     schema: {
+      headers,
       body: {
         type: 'object',
-        required: ['superAdmin'],
+        required: ['users'],
         properties: {
-          superAdmin: {
+          user: {
             type: 'object',
             properties: {
               name: { type: 'string' },
@@ -17,6 +20,7 @@ const updateSuperAdminOpts = {
         }
       },
       response: {
+        headers,
         201: {
           description: 'Successful response',
           type: 'object',
@@ -34,5 +38,5 @@ const updateSuperAdminOpts = {
       }
     }
   };
-  export default updateSuperAdminOpts;
+  export default updateUserOpts;
   

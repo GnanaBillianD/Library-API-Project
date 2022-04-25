@@ -1,6 +1,6 @@
 import { UserInstance } from '../types';
 
-export default class SuperAdminPolicy {
+export default class UserPolicy {
   constructor(private currentUser: UserInstance) {}
 
   canCreate() {
@@ -20,6 +20,9 @@ export default class SuperAdminPolicy {
   }
 
   canDelete() {
+    return this.currentUser.isSuperAdmin();
+  }
+  canCreateBooks() {
     return this.currentUser.isSuperAdmin();
   }
 }

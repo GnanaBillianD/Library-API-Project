@@ -1,20 +1,20 @@
 'use strict';
-import { DataTypes, Model, Sequelize, ModelDefined } from 'sequelize';
-import { BookAttributes, BookCreationAttributes } from '../types/book';
+import { DataTypes, Sequelize } from 'sequelize';
+import { BookStatic } from '../types/book';
+import { isNameUnique } from './validation/book.model.validators'
 
-export interface BookInstance
-  extends Model<BookAttributes, BookCreationAttributes>,
-    BookAttributes {}
+// type BookModelDefined = ModelDefined<BookAttributes, BookCreationAttributes>;
 
-type BookModelDefined = ModelDefined<BookAttributes, BookCreationAttributes>;
-
-function Book(sequelize: Sequelize): BookModelDefined {
+function Book(sequelize: Sequelize): BookStatic {
   return sequelize.define(
     'Book',
     {
       name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate:{
+          isNameUnique,
+        }
       },
       category: {
         type: DataTypes.STRING,
@@ -25,7 +25,7 @@ function Book(sequelize: Sequelize): BookModelDefined {
         allowNull: true
       },
       amount: {
-        type: DataTypes.NUMBER,
+        type: DataTypes.DECIMAL(10,2),
         allowNull: true
       },
       notes: {
@@ -41,6 +41,6 @@ function Book(sequelize: Sequelize): BookModelDefined {
       deletedAt: 'deleted_at',
       paranoid: true
     }
-  ) as BookModelDefined;
+  ) as BookStatic;
 }
 export default Book;

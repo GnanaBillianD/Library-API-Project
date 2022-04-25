@@ -1,3 +1,5 @@
+import { BuildOptions, Model } from 'sequelize';
+
 export interface BookAttributes {
   id: bigint;
   name: string;
@@ -13,3 +15,11 @@ export type BookCreationAttributes = Pick<
   BookAttributes,
   'name' | 'author' | 'category' | 'amount' | 'notes'
 >;
+
+export interface BookInstance
+  extends Model<BookAttributes, BookCreationAttributes>,
+    BookAttributes {}
+
+export type BookStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): BookInstance;
+};

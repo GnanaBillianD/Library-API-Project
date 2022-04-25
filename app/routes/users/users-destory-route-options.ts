@@ -1,5 +1,8 @@
-const destorySuperAdminOpts = {
+import { headers } from "../shared-schema/auth-header.schema";
+
+const destoryUserOpts = {
     schema: {
+      headers,
       response: {
         200: {
           type: 'object',
@@ -11,5 +14,5 @@ const destorySuperAdminOpts = {
     }
   };
   
-  export default destorySuperAdminOpts;
+  export default destoryUserOpts;
   

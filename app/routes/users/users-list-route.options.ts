@@ -1,4 +1,4 @@
-const listSuperAdminOpts = {
+const listUserOpts = {
   schema: {
     response: {
       201: {
@@ -18,4 +18,4 @@ const listSuperAdminOpts = {
     }
   }
 };
-export default listSuperAdminOpts;
+export default listUserOpts;

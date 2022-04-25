@@ -1,13 +1,14 @@
 import { FastifyError, FastifyReply, FastifyRequest } from 'fastify';
 import { BookCreationAttributes, BookInstance } from '../../types';
 import * as BookServices from '../../services/book.service';
-import SuperAdminPolicy from '../../policies/super-admin.policy';
+import UserPolicy from '../../policies/user.policy';
+import { BookListQUeryParams } from '../../types/books.controller';
 
 type createBody = { book: BookCreationAttributes };
 
 function create(req: FastifyRequest, reply: FastifyReply) {
   const { currentUser, body } = req;
-  const policy = new SuperAdminPolicy(currentUser);
+  const policy = new UserPolicy(currentUser);
   const params = body as createBody;
   if (policy.canView()) {
     BookServices.create(params.book)
@@ -25,7 +26,8 @@ function create(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function list(req: FastifyRequest, reply: FastifyReply) {
-  BookServices.list()
+  const query = req.query as BookListQUeryParams;
+  BookServices.listAndPaginate(query)
     .then((result: BookInstance) => {
       reply.code(200).send(result);
     })
@@ -48,7 +50,7 @@ function view(req: FastifyRequest, reply: FastifyReply) {
 function update(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
   const { body } = req;
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   const params = body as createBody;
   if (policy.canUpdate()) {
     BookServices.update(id, params.book)
@@ -65,9 +67,27 @@ function update(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
+async function bulkupload(req: FastifyRequest, reply: FastifyReply) {
+  const attrs = await req.file();
+  const policy = new UserPolicy(req.currentUser);
+  if (policy.canCreateBooks()) {
+    BookServices.bookBulkUpload(attrs)
+      .then(() => {
+        reply.code(201).send({ message: 'Books created successfully' });
+      })
+      .catch((error: FastifyError) => {
+        reply.code(422).send({ errors: [error.message] });
+      });
+  } else {
+    reply
+      .code(403)
+      .send({ errors: ['You are not allowed to perform this action'] });
+  }
+}
+
 function destory(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new SuperAdminPolicy(req.currentUser);
+  const policy = new UserPolicy(req.currentUser);
   if (policy.canDelete()) {
     BookServices.destoryById(id)
       .then(() => {
@@ -83,4 +103,4 @@ function destory(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
-export { create, list, update, view, destory };
+export { create, list, update, view, destory, bulkupload };
