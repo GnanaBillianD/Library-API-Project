@@ -14,8 +14,6 @@ function bookPrivateRoutes(
   next: (err?: Error) => void
 ) {
   fastify.post('/books', createBookOpts, BookController.create);
-  fastify.get('/books', listBookOpts, BookController.list);
-  fastify.get('/books/:id', viewBookOpts, BookController.view);
   fastify.put('/books/:id', updatedBookOpts, BookController.update);
   fastify.delete('/books/:id', destoryBookOpts, BookController.destory);
   fastify.post(

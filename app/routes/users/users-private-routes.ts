@@ -15,7 +15,6 @@ function UserPrivateRoutes(
   fastify.post('/users', createUserOpts,UserController.create);
   fastify.get('/users', listUserOpts,UserController.list);
   fastify.get('/users/:id', viewUserOpts,UserController.view);
-  fastify.put('/users/:id', updateUserOpts,UserController.update);
   fastify.delete('/users/:id', destoryUserOpts,UserController.destory)
   next();
 }
