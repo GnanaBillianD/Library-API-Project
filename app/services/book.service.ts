@@ -1,10 +1,10 @@
-import { BookCreationAttributes, BookInstance } from '../types';
+import { BookCreationAttributes } from '../types';
 import models from '../models';
 import {
   BookListQUeryParams,
   BookRowsAndCount
 } from '../types/books.controller';
-import { size, map, isEqual, some } from 'lodash';
+import { size, map, isEqual } from 'lodash';
 import { BOOK_BULK_UPLOAD_HEADERS, Q_MINIMUM_SIZE } from '../config/constants';
 import globalSearchQuery from '../queries/book-global-search.query';
 import columnSearchQuery from '../queries/book-clolumn-search.query';
@@ -20,12 +20,6 @@ import db from '../models';
 
 const pump = util.promisify(pipeline);
 const { Book } = models;
-
-// const env = process.env.NODE_ENV || 'development';
-// // tslint:disable-next-line: no-var-requires
-// const config = require(`${__dirname}/../../db/config.json`)[env];
-
-// const db = new Sequelize(process.env[config.use_env_variable] as string);
 
 async function create(attributes: BookCreationAttributes) {
   const book = await Book.findOne({ where: { name: attributes.name } });
@@ -78,24 +72,24 @@ async function update(id, params: BookCreationAttributes) {
 }
 
 async function bookBulkUpload(attrs) {
-  console.log('attrs================>', attrs.file);
+  // console.log('attrs================>', attrs.file);
   const { mimetype: fileType } = attrs;
   if (!(fileType.includes('excel') || fileType.includes('spreadsheetml'))) {
     throw new Error('Kindly upload only excel file');
   }
   const fileName = `${new Date().getTime()}.xlsx`;
   const filePath = `${__dirname}/../assets/books/${fileName}`;
-  console.log('file--------------', filePath);
+  // console.log('file--------------', filePath);
 
   // const t = await db.transaction();
   const t = await db.sequelize.transaction();
 
   try {
-    console.log('------------------------------------');
+    // console.log('------------------------------------');
     await pump(attrs.file, createWriteStream(filePath));
 
     const bookList = await readXlsxFile(filePath);
-    console.log('booklist is--------------', bookList);
+    // console.log('booklist is--------------', bookList);
 
     if (!(size(bookList) > 1)) {
       throw new Error('Kindly provide books data');
