@@ -1,6 +1,5 @@
 import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import bookPublicRoutes from './books/book-public.routes';
 import passwordsPublicRoutes from './passwords/passwords-public-routes';
 import sessionPublicRoutes from './sessions/session-public.routes';
 import ssePublicRoutes from './sse/sse-private-routes';
@@ -10,7 +9,6 @@ function publicRoutes(
   opts: { prefix: string },
   next: (err?: Error) => void
 ) {
-  fastify.register(bookPublicRoutes);
   fastify.register(sessionPublicRoutes);
   fastify.register(passwordsPublicRoutes);
   fastify.register(ssePublicRoutes);

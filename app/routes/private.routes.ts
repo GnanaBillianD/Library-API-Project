@@ -4,7 +4,8 @@ import { IncomingMessage, Server, ServerResponse } from 'http';
 import { UserInstance } from '../types';
 import sessionPrivateRoutes from './sessions/session-private.routes';
 import passwordsPrivateRoutes from './passwords/passwords-private-router';
-import UserEditPrivateRoutes from './users/users-edit-privte.routes';
+import bookPrivateRoutes from './books';
+import UserPrivateRoutes from './users/users-private-routes';
 
 declare module 'fastify' {
   interface FastifyRequest {
@@ -21,9 +22,10 @@ function privateRoutes(
   next: (err?: Error) => void
 ) {
   userAuthenticate(fastify);
+  fastify.register(bookPrivateRoutes);
+  fastify.register(UserPrivateRoutes);
   fastify.register(sessionPrivateRoutes);
   fastify.register(passwordsPrivateRoutes);
-  fastify.register(UserEditPrivateRoutes);
   next();
 }
 

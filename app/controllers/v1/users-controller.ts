@@ -7,7 +7,6 @@ import {
   update as userUpdate,
   destoryById
 } from '../../services/users.service';
-import UserPolicy from '../../policies/user.policy';
 import {
   CreateUsersParams,
   UpdateUsersParams
@@ -17,8 +16,7 @@ type CreateUsersBody = { super_admin: CreateUsersParams };
 type UpdateUsersBoday = { super_admin: UpdateUsersParams };
 
 function create(req: FastifyRequest, reply: FastifyReply) {
-  const { currentUser, body } = req;
-  const policy = new UserPolicy(currentUser);
+  const { body } = req;
   const params = body as CreateUsersBody;
   userCreate(params)
     .then(() => {
@@ -30,7 +28,6 @@ function create(req: FastifyRequest, reply: FastifyReply) {
 }
 
 function list(req: FastifyRequest, reply: FastifyReply) {
-  const policy = new UserPolicy(req.currentUser);
   usersList()
     .then((result: UserInstance) => {
       reply.code(200).send(result);
@@ -42,7 +39,6 @@ function list(req: FastifyRequest, reply: FastifyReply) {
 
 function view(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new UserPolicy(req.currentUser);
   userDetails(id)
     .then((result: UserInstance) => {
       reply.code(200).send(result);
@@ -54,8 +50,7 @@ function view(req: FastifyRequest, reply: FastifyReply) {
 
 function update(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const { currentUser, body } = req;
-  const policy = new UserPolicy(currentUser);
+  const { body } = req;
   const params = body as UpdateUsersBoday;
   userUpdate(id, params)
     .then((result: UserInstance) => {
@@ -68,7 +63,6 @@ function update(req: FastifyRequest, reply: FastifyReply) {
 
 function destory(req: FastifyRequest, reply: FastifyReply) {
   const { id } = req.params as { id: number };
-  const policy = new UserPolicy(req.currentUser);
   destoryById(id)
     .then(() => {
       reply.code(200).send({ message: 'successfully deleted' });
