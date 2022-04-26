@@ -6,10 +6,10 @@ import destoryUserOpts from './users-destory-route-options';
 import listUserOpts from './users-list-route.options';
 import updateUserOpts from './users-update-route-options';
 import viewUserOpts from './users-view-route-options';
-import canCreate from '../../prehandler/users/user-create-router-prehandler';
-import canList from '../../prehandler/users/user-list-router-prehandler';
-import canView from '../../prehandler/users/user-view-router-prehandler';
-import canDelete from '../../prehandler/users/user-delete-router-prehandler';
+import canCreate from '../../authorization-handlers/users/user-create-router-prehandler';
+import canList from '../../authorization-handlers/users/user-list-router-prehandler';
+import canView from '../../authorization-handlers/users/user-view-router-prehandler';
+import canDelete from '../../authorization-handlers/users/user-delete-router-prehandler';
 
 function UserPrivateRoutes(
   fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,

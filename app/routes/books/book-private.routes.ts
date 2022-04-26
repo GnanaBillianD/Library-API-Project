@@ -2,15 +2,15 @@ import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
 import * as BookController from '../../controllers/v1/books.controller';
 import uploadBulkRouterOpts from './book-bulk-upload-router-options';
-import canCreate from '../../prehandler/books/book-create-router-prehandler';
+import canCreate from '../../authorization-handlers/books/book-create-router-prehandler';
 import createBookOpts from './book-create-route-options';
 import destoryBookOpts from './book-destory-route-options';
 import listBookOpts from './book-list-route-options';
 import updatedBookOpts from './book-update-route-options';
 import viewBookOpts from './book-view-route-options';
-import canUpdate from '../../prehandler/books/book-update-router-prehandler';
-import canDelete from '../../prehandler/books/book-delete-route-prehandler';
-import canCreateBooks from '../../prehandler/books/book-bulk-upload-router-prehandler';
+import canUpdate from '../../authorization-handlers/books/book-update-router-prehandler';
+import canDelete from '../../authorization-handlers/books/book-delete-route-prehandler';
+import canCreateBooks from '../../authorization-handlers/books/book-bulk-upload-router-prehandler';
 
 function bookPrivateRoutes(
   fastify: FastifyInstance<Server, IncomingMessage, ServerResponse>,
