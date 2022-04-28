@@ -19,7 +19,7 @@ async function signin(attrs: LoginServiceParams) {
     throw new SessionError('Invalid email or password');
   }
   validatePassword(currentUser, attrs.password);
-  const accessToken = await markSignin(currentUser, attrs);
+  const accessToken = await markSignin(currentUser);
   return accessToken;
 }
 
@@ -44,7 +44,7 @@ function validatePassword(currentUser: UserInstance, password: string) {
   }
 }
 
-async function markSignin(user: UserInstance, attrs: LoginServiceParams) {
+async function markSignin(user: UserInstance) {
   const { email } = user;
   const { JWT_SECRET_KEY } = process.env;
   const token = jwtSignin({ email }, JWT_SECRET_KEY, { expiresIn: 180000 });
@@ -75,8 +75,8 @@ function verifyToken(
   token: string,
   secretKey: string
 ): Promise<JwtResetTokenUserAttributes> {
-  console.log('token is======================?', token);
-  console.log('key is=========================?', secretKey);
+  // console.log('token is======================?', token);
+  // console.log('key is=========================?', secretKey);
 
   return new Promise((resolve, reject) =>
     jwtVerify(
@@ -86,7 +86,7 @@ function verifyToken(
         if (err) {
           reject(err);
         } else {
-          console.log('log=-==================?');
+          // console.log('log=-==================?');
           resolve(decoded);
         }
       }

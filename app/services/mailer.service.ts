@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 });
 
 function sendResetPasswordLink(user: UserInstance, token: string) {
-  console.log("transporter----------",token);
+  // console.log("transporter----------",token);
   
   return transporter.sendMail({
     to: user.email,
@@ -26,7 +26,7 @@ function sendResetPasswordLink(user: UserInstance, token: string) {
 }
 
 function sendInvitationLink(user: UserInstance, token: string) {
-  console.log("-------------------token",token);
+  // console.log("-------------------token",token);
   
   return transporter.sendMail({
     to: user.email,

@@ -37,9 +37,9 @@ const sseAuthenticate = (fastify: FastifyInstance) => {
   fastify.addHook(
     'preHandler',
     async (request: FastifyRequest, reply: FastifyReply) => {
-      console.log("request-----------",request.query)
+      // console.log("request-----------",request.query)
       const token = getAuthToken(request.query);
-      console.log("token--------",token);
+      // console.log("token--------",token);
       
       if (!token) {
         const error = {
@@ -49,7 +49,7 @@ const sseAuthenticate = (fastify: FastifyInstance) => {
       } else {
         try {
           const userAttrs = await verifyToken(token, JWT_SECRET_KEY);
-          console.log("userAttrs--------",userAttrs)
+          // console.log("userAttrs--------",userAttrs)
           const user = await User.findOne({
             where: { email: userAttrs.email }
           });

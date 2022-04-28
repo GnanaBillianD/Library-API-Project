@@ -10,7 +10,7 @@ import globalSearchQuery from '../queries/book-global-search.query';
 import columnSearchQuery from '../queries/book-clolumn-search.query';
 import { paginate } from '../lib/paginator-result';
 import { paginatorResult } from '../lib/paginator-result';
-import { DecimalDataType, EmptyResultError, Sequelize } from 'sequelize';
+import { EmptyResultError } from 'sequelize';
 import util from 'util';
 import { pipeline } from 'stream';
 import { createWriteStream, unlinkSync } from 'fs';
@@ -119,7 +119,7 @@ async function bookBulkUpload(attrs) {
         amount,
         notes
       };
-      console.log("attrrr-----",attributes);
+      // console.log("attrrr-----",attributes);
       
       await Book.create(attributes, { transaction: t });
     });    
@@ -127,7 +127,7 @@ async function bookBulkUpload(attrs) {
     await t.commit();
     unlinkSync(filePath);
   } catch (error) {
-    console.log('error is', error);
+    // console.log('error is', error);
 
     await t.rollback();
     unlinkSync(filePath);

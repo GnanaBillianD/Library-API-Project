@@ -10,7 +10,8 @@
     "postinstall": "npm run build",
     "start": "node --inspect=5858 -r ts-node/register ./app/index.ts",
     "start:watch": "nodemon",
-    "lint": "tslint -c tslint.json -p tsconfig.json fix"
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,9 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
+    "@typescript-eslint/eslint-plugin": "^5.21.0",
+    "@typescript-eslint/parser": "^5.21.0",
+    "eslint": "^8.14.0",
     "nodemon": "^2.0.15",
     "prettier": "^2.6.2",
     "ts-node": "^10.7.0",
