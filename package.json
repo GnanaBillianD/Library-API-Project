@@ -10,15 +10,10 @@
     "postinstall": "npm run build",
     "start": "node --inspect=5858 -r ts-node/register ./app/index.ts",
     "start:watch": "nodemon",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint . --ext .ts --fix",
     "prettier-format": "prettier --config .prettierrc 'app/**/*.ts' --write",
     "prettier-watch": "onchange 'app/**/*.ts' -- prettier --write {{changed}}",
     "prepare": "husky install"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
   },
   "keywords": [],
   "author": "",
