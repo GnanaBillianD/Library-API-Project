@@ -12,8 +12,8 @@
     "start:watch": "nodemon",
     "lint": "eslint . --ext .ts",
     "lint-and-fix": "eslint . --ext .ts --fix",
-    "prettier-format": "prettier --config .prettierrc '**/index.ts' --write",
-    "prettier-watch": "onchange '**/index.ts' -- prettier --write {{changed}}"
+    "prettier-format": "prettier --config .prettierrc 'app/index.ts' --write",
+    "prettier-watch": "onchange 'app/index.ts' -- prettier --write {{changed}}"
   },
   "husky": {
     "hooks": {
