@@ -1,7 +1,7 @@
 'use strict';
 import { DataTypes, Sequelize } from 'sequelize';
 import { BookStatic } from '../types/book';
-import { isNameUnique } from './validation/book.model.validators'
+import { isNameUnique } from './validation/book.model.validators';
 
 // type BookModelDefined = ModelDefined<BookAttributes, BookCreationAttributes>;
 
@@ -12,8 +12,8 @@ function Book(sequelize: Sequelize): BookStatic {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate:{
-          isNameUnique,
+        validate: {
+          isNameUnique
         }
       },
       category: {
@@ -25,7 +25,7 @@ function Book(sequelize: Sequelize): BookStatic {
         allowNull: true
       },
       amount: {
-        type: DataTypes.DECIMAL(10,2),
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: true
       },
       notes: {

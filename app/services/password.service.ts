@@ -39,9 +39,12 @@ async function sendResetPasswordInstruction(email: string) {
   sendResetPasswordLink(user, token);
 }
 
-async function decryptUserAttrsFromInvitationToken(invitationToken: string, type: string) {
+async function decryptUserAttrsFromInvitationToken(
+  invitationToken: string,
+  type: string
+) {
   // console.log("invitationToken-------------------->", invitationToken)
-  const token = invitationToken
+  const token = invitationToken;
   // console.log("invitation=--=-=-=-=-=-=-=-", token)
   if (!token) {
     throw new SessionError('No access token found');

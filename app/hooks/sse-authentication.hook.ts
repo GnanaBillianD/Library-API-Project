@@ -40,7 +40,6 @@ const sseAuthenticate = (fastify: FastifyInstance) => {
       // console.log("request-----------",request.query)
       const token = getAuthToken(request.query);
       // console.log("token--------",token);
-      
       if (!token) {
         const error = {
           errors: ['You need to sign-in to access this page']

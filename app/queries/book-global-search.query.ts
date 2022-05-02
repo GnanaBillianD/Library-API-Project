@@ -42,4 +42,4 @@ const globalSearchQuery = (query: BookListQUeryParams) => {
   };
   return result;
 };
-export default globalSearchQuery ;
+export default globalSearchQuery;

@@ -5,7 +5,7 @@ import * as sequelize from 'sequelize';
 const env = process.env.NODE_ENV || 'development';
 const basename = path.basename(__filename);
 // tslint:disable-next-line: no-var-requires
- /* eslint-disable */ 
+/* eslint-disable */
 const config = require(`${__dirname}/../../db/config.json`)[env];
 // console.log('config', process.env[config.use_env_variable]);
 const ignoreFiles = [basename];

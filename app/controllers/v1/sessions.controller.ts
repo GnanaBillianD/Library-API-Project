@@ -26,4 +26,3 @@ function logout(req: FastifyRequest, reply: FastifyReply) {
 }
 
 export { login, logout };
-  

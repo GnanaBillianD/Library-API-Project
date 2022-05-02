@@ -120,9 +120,9 @@ async function bookBulkUpload(attrs) {
         notes
       };
       // console.log("attrrr-----",attributes);
-      
+
       await Book.create(attributes, { transaction: t });
-    });    
+    });
     await Promise.all(allBooks);
     await t.commit();
     unlinkSync(filePath);

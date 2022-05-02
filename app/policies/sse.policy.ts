@@ -7,4 +7,3 @@ export default class SSEPolicy {
     return !!this.currentUser;
   }
 }
-    

@@ -60,8 +60,4 @@ function changePassword(req: FastifyRequest, reply: FastifyReply) {
     });
 }
 
-export {
-  sendResetPasswordLink,
-  resetPassword,
-  changePassword
-};
+export { sendResetPasswordLink, resetPassword, changePassword };
