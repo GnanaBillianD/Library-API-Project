@@ -1,11 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint", 
-    "prettier", 
-    "no-loops"
-  ],
+  "plugins": ["@typescript-eslint", "prettier", "no-loops"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -16,7 +12,7 @@
     "no-extra-boolean-cast": 0,
     "no-console": 2,
     "@typescript-eslint/no-explicit-any": 0,
-    "no-loops/no-loops": 2, // 2 means throw an ERROR
+     "no-loops/no-loops": 2, // 2 means throw an ERROR 
     "prettier/prettier": 2 // Means error
   }
 }
