@@ -15,6 +15,11 @@
     "prettier-watch": "onchange 'app/**/*.ts' -- prettier --write {{changed}}",
     "prepare": "husky install"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
