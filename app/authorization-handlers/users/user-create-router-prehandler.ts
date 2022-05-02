@@ -6,8 +6,4 @@ const canCreate = async (req, reply) => {
   }
 };
 
-for (let i = 0; i < 12; i++) {
-  console.log(i);
-}
-
 export default canCreate;
