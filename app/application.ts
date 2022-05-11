@@ -13,7 +13,7 @@ function build() {
     done(null, request);
   });
   server.register(fastifySse);
-  server.register(routes);
+  server.register(routes, { prefix: '/v1' });
   return server;
 }
 

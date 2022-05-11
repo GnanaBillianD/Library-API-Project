@@ -1,5 +1,8 @@
+import UserPolicy from '../../policies/user.policy';
+
 const canCreate = async (req, reply) => {
-  if (!req.currentUser.isSuperAdmin()) {
+  const policy = new UserPolicy(req.currentUser);
+  if (!policy.canCreate) {
     reply
       .code(403)
       .send({ errors: ['You are not allowed to perform this action'] });
