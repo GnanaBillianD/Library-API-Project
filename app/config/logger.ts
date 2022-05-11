@@ -7,7 +7,7 @@ const logConfig = {
   level: logLevel,
   timestamp: () => `,"time":"${moment.utc()}"`,
   formatters: {
-    level(lable: string, num: number) {
+    level(lable: string) {
       return { level: lable };
     }
   }

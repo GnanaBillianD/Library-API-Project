@@ -1,10 +1,10 @@
 import userAuthenticate from '../hooks/user-authentication.hook';
 import { FastifyInstance } from 'fastify';
 import { IncomingMessage, Server, ServerResponse } from 'http';
-import bookPrivateRoutes from './books';
 import { UserInstance } from '../types';
 import sessionPrivateRoutes from './sessions/session-private.routes';
 import passwordsPrivateRoutes from './passwords/passwords-private-router';
+import bookPrivateRoutes from './books';
 import UserPrivateRoutes from './users/users-private-routes';
 
 declare module 'fastify' {

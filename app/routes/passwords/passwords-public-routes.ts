@@ -17,7 +17,7 @@ function passwordsPublicRoutes(
     sendResetPasswordRouterOpts,
     sendResetPasswordLink
   );
-  fastify.post('/passwords/reset',resetPasswordRouterOpts, resetPassword);
+  fastify.post('/passwords/reset', resetPasswordRouterOpts, resetPassword);
   next();
 }
 export default passwordsPublicRoutes;

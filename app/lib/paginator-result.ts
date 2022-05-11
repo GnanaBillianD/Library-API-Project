@@ -1,10 +1,10 @@
 export interface PaginatorType {
-    data: any[];
-    total: number;
-    per_page: number;
-    last_page: number;
-    current_page: number;
-  }
+  data: any[];
+  total: number;
+  per_page: number;
+  last_page: number;
+  current_page: number;
+}
 
 export interface PaginateType {
   count: number;

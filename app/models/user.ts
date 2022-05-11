@@ -1,11 +1,10 @@
 'use strict';
 import { DataTypes, Sequelize } from 'sequelize';
+import { UserInstance, UserStatic, USER_ROLE } from '../types/users';
 import {
-  UserInstance,
-  UserStatic,
-  USER_ROLE
-} from '../types/users';
-import { isEmailUnique, isValidPassword } from './validation/user.model.validators';
+  isEmailUnique,
+  isValidPassword
+} from './validation/user.model.validators';
 import bcrypt from 'bcrypt';
 
 // type UserModelDefined = ModelDefined<UserAttributes, UserCreationAttributes>;
@@ -23,7 +22,7 @@ function User(sequelize: Sequelize): UserStatic {
         allowNull: false
       },
       email: {
-        type: new DataTypes.STRING,
+        type: new DataTypes.STRING(),
         allowNull: false,
         validate: {
           isEmailUnique,
@@ -49,7 +48,7 @@ function User(sequelize: Sequelize): UserStatic {
         type: DataTypes.VIRTUAL,
         allowNull: true,
         validate: {
-          isValidPassword,
+          isValidPassword
         },
         set(this: UserInstance, val: string) {
           if (!!val) {

@@ -1,5 +1,5 @@
 import { secureErrors } from '../shared-schema/secure-error-schema';
-import { headers } from '../shared-schema/auth-header.schema'
+import { headers } from '../shared-schema/auth-header.schema';
 
 const changePasswordRouterOpts = {
   schema: {

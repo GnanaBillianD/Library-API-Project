@@ -12,8 +12,8 @@ const transporter = nodemailer.createTransport({
 });
 
 function sendResetPasswordLink(user: UserInstance, token: string) {
-  console.log("transporter----------",token);
-  
+  // console.log("transporter----------",token);
+
   return transporter.sendMail({
     to: user.email,
     from: process.env.EMAIL,
@@ -26,8 +26,8 @@ function sendResetPasswordLink(user: UserInstance, token: string) {
 }
 
 function sendInvitationLink(user: UserInstance, token: string) {
-  console.log("-------------------token",token);
-  
+  // console.log("-------------------token",token);
+
   return transporter.sendMail({
     to: user.email,
     from: process.env.EMAIL,
@@ -39,4 +39,4 @@ function sendInvitationLink(user: UserInstance, token: string) {
   });
 }
 
-export { sendInvitationLink,  sendResetPasswordLink };
+export { sendInvitationLink, sendResetPasswordLink };

@@ -9,7 +9,7 @@ function login(req: FastifyRequest, reply: FastifyReply) {
       reply.header('Authorization', `Bearer ${accessToken}`);
       reply.code(200).send({ message: 'Login successfully' });
     })
-    .catch((error) => {
+    .catch(() => {
       reply.code(400).send({ message: 'Invalid password or email' });
     });
 }

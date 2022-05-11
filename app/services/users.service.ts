@@ -4,7 +4,6 @@ import { sendInvitationLink } from './mailer.service';
 import { sign as jwtSignin } from 'jsonwebtoken';
 import { TOKEN_TYPE } from '../config/constants';
 import { EmptyResultError } from 'sequelize';
-import { CreateUsersParams } from '../types/users-controller';
 
 const { UserInstance } = models;
 
@@ -30,7 +29,7 @@ async function create(attributes) {
   // if (user) {
   //   throw new Error('user email already exist');
   // }
-  const users = await User.create(attributes.users).then((user) => {
+  await User.create(attributes.users).then((user) => {
     generateJwtToken(user);
     return user;
   });
@@ -48,7 +47,7 @@ async function getById(id) {
   return user;
 }
 
-async function update(id:Number, params) {
+async function update(id, params) {
   const user = await User.findOne({ where: { id } });
   const users = await User.findOne({
     where: { email: params.users.email }
@@ -62,7 +61,7 @@ async function update(id:Number, params) {
   return user.update(params.users);
 }
 
-async function destoryById(id:Number) {
+async function destoryById(id) {
   const user = await User.findOne({ where: { id } });
   if (!user) {
     throw new EmptyResultError('User not found');
